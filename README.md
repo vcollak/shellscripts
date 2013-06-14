@@ -4,14 +4,21 @@
 Various useful shell scripts.
 
 ## Scripts
-### /CreatingNewSite/create-new-site.sh - Script for Bitnami that allows users to create a new apache site based on a template. Specificlaly, the script will copy a directory from "/opt/bitnami/apps/template" into another directory of your choosing (based on site_name param). It will then re-configure the app.conf accordingly (based on site_name, site_domain, and test_domain).
+### /CreatingNewSite/create-new-site.sh
+Script for Bitnami that allows users to create a new apache site based on a template. The script will copy a directory from "/opt/bitnami/apps/template" into another directory of your choosing (based on site_name param). It will then re-configure the app.conf accordingly (based on site_name, site_domain, and test_domain).
 
 Look inside of the create-new-site.sh for common vars set including: 
+
 app_dir="/opt/bitnami/apps"
+
 apache_conf_dir="/opt/bitnami/apache2/conf"
+
 apache_conf_file="httpd.conf"
+
 bitnami_user="bitnami"
+
 daemon_user="daemon"
+
 
 
     $ Usage: ./create-new-site.sh site_name site_domain test_domain
