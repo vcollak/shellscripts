@@ -1,0 +1,45 @@
+#!/bin/sh
+
+
+#make sure we have params
+if [ "$1" = "" ]; then
+    echo "Usage: $0 site_name site_domain test_domain"
+    exit 1
+fi
+
+#get params
+site_name=$1
+site_domain=$2
+test_domain=$3
+
+#common vars
+app_dir="/opt/bitnami/apps"
+apache_conf_dir="/opt/bitnami/apache2/conf"
+apache_conf_file="httpd.conf"
+bitnami_user="bitnami"
+daemon_user="daemon"
+
+
+
+if [ ! -d "$app_dir/$site_name" ]; then
+
+
+        echo "Creating $site_name"
+        cp -R $app_dir/template $app_dir/$site_name
+        sed -i "s/#dir#/$site_name/g" $app_dir/$site_name/conf/app.conf
+        sed -i "s/#srvname_www#/$site_name/g" $app_dir/$site_name/conf/app.conf
+        sed -i "s/#srvname_domain#/$site_domain/g" $app_dir/$site_name/conf/app.conf
+        sed -i "s/#srvname_test#/$test_domain/g" $app_dir/$site_name/conf/app.conf
+        echo "$site_name" > $app_dir/$site_name/htdocs/index.html
+        echo "Include \"/opt/bitnami/apps/$site_name/conf/app.conf\"" >> $apache_conf_dir/$apache_conf_file
+        chown -R $bitnami_user:$daemon_user $app_dir/$site_name
+        chmod -R 770 $app_dir/$site_name
+        echo "kill -USR1 $(ps -ef | grep httpd | grep root  | grep -v grep | awk '{ print $2 }')"
+
+
+
+else
+        echo "Will not create - $app_dir/$site_name already exists"
+
+
+fi
